@@ -24,3 +24,11 @@ spring:
     port: 5672
     username: admin
     password: admin
+
+location:
+  api:
+    url:  https://geocoding-api.open-meteo.com/v1/search?name=%s&count=10&language=en&format=json&countryCode=%s
+
+weather:
+  api:
+    url:  https://archive-api.open-meteo.com/v1/archive?latitude=%f&longitude=%f&start_date=%s&end_date=%s&daily=sunrise,sunset&hourly=temperature_2m,rain,wind_speed_10m&timezone=Europe/Warsaw
