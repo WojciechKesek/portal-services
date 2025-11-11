@@ -15,8 +15,8 @@ public class WeatherController {
     private final WeatherService weatherService;
 
     @PostMapping
-    public ResponseEntity<WeatherResponse> getHistoricalWeather(@RequestBody WeatherRequest weatherRequest) {
-        return ResponseEntity.ok(weatherService.getWeather(weatherRequest.getStartDate(), weatherRequest.getEndDate(),
-                weatherRequest.getLatitude(), weatherRequest.getLongitude()));
+    public ResponseEntity<WeatherResponse> getHistoricalWeather(@RequestBody WeatherRequest request) {
+        return ResponseEntity.ok(weatherService.getWeather(request.getStartDate(), request.getEndDate(),
+                request.getLatitude(), request.getLongitude()));
     }
 }
