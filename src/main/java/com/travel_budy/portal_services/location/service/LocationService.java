@@ -12,6 +12,9 @@ public class LocationService {
     private final LocationClient locationClient;
 
     public LocationResponse getLocation(String city, String countryCode) {
+
         return locationClient.getLocation(city, countryCode);
+
+
     }
 }
