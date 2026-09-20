@@ -1,41 +1,88 @@
 # Portal Services
 
-Backend service for the Portal application, providing REST APIs and business logic for managing application data and communicating with the persistence layer.
+Backend application built with **Java 25 and Spring Boot**, providing a REST API for managing portal data.
 
-The project is built with **Spring Boot** and uses **PostgreSQL** as the relational database.
+The project demonstrates a clean, layered backend architecture with **Spring Web, Spring Data JPA and PostgreSQL**, together with automated tests and environment-based configuration.
 
-## 🛠️ Tech Stack
+## 🚀 Tech Stack
 
-* Java 25
-* Spring Boot 3.5.7
-* Spring Web
-* Spring Data JPA
-* PostgreSQL
-* Maven
-* JUnit / Spring Boot Test
+* **Java 25**
+* **Spring Boot 3.5.7**
+* **Spring Web**
+* **Spring Data JPA**
+* **Hibernate**
+* **PostgreSQL**
+* **Maven**
+* **JUnit / Spring Boot Test**
 
----
+## 🏗️ Architecture
 
-## 📋 Requirements
+The application follows a layered architecture with a clear separation of responsibilities:
 
-Before running the application locally, make sure you have installed:
-
-* **JDK 25**
-* **Maven 3.9+**
-* **PostgreSQL 15+**
-* Git
-
-Check your versions:
-
-```bash
-java -version
-mvn -version
-psql --version
+```text
+src/main/java
+├── config
+├── controller
+├── dto
+├── entity
+├── repository
+└── service
 ```
 
----
+### Main layers
 
-## 🚀 Getting Started
+* **Controller** — exposes REST API endpoints
+* **Service** — contains application and business logic
+* **Repository** — handles database access through Spring Data JPA
+* **Entity** — represents persisted domain objects
+* **DTO** — separates API models from persistence models
+* **Config** — application configuration
+
+This structure keeps responsibilities separated and makes the application easier to test and maintain.
+
+## 🔗 REST API
+
+The application exposes REST endpoints for managing portal resources.
+
+The API follows standard REST principles and uses:
+
+* HTTP methods such as `GET`, `POST`, `PUT` and `DELETE`
+* JSON request and response bodies
+* DTOs for API communication
+* HTTP status codes
+* Spring MVC
+
+## 🗄️ Database
+
+The application uses **PostgreSQL** as its relational database.
+
+Data access is implemented using:
+
+* Spring Data JPA
+* Hibernate
+* Repository pattern
+* JPA entity mapping
+
+Database configuration is externalized through Spring Boot application properties.
+
+## 🧪 Testing
+
+The project includes automated tests using:
+
+* **JUnit**
+* **Spring Boot Test**
+
+The test structure is designed to verify application behaviour while keeping business logic separated from infrastructure concerns.
+
+## ⚙️ Running the Application
+
+### Prerequisites
+
+Make sure you have installed:
+
+* Java 25
+* PostgreSQL
+* Git
 
 ### 1. Clone the repository
 
@@ -46,114 +93,37 @@ cd portal-services
 
 ### 2. Configure PostgreSQL
 
-Create a database and a dedicated user:
-
-```sql
-CREATE DATABASE portal_services;
-
-CREATE USER portal_services_user WITH PASSWORD 'portal_services_password';
-
-GRANT ALL PRIVILEGES ON DATABASE portal_services
-TO portal_services_user;
-```
-
-Connect to the database and grant schema permissions if required:
-
-```sql
-\c portal_services
-
-GRANT ALL ON SCHEMA public TO portal_services_user;
-```
-
-### 3. Configure the application
-
-Configure the database connection in the application's configuration file, for example:
-
-```properties
-spring.datasource.url=jdbc:postgresql://localhost:5432/portal_services
-spring.datasource.username=portal_services_user
-spring.datasource.password=portal_services_password
-
-spring.jpa.hibernate.ddl-auto=update
-spring.jpa.properties.hibernate.format_sql=true
-```
-
-For local development it is recommended to keep credentials outside the repository and provide them using environment variables or a local configuration file.
-
-Example:
-
-```bash
-export DB_URL=jdbc:postgresql://localhost:5432/portal_services
-export DB_USERNAME=portal_services_user
-export DB_PASSWORD=portal_services_password
-```
-
-> Never commit production credentials, API keys or other secrets to the repository.
-
----
-
-## ▶️ Running the Application
-
-Build the project:
-
-```bash
-mvn clean install
-```
-
-Run the application:
-
-```bash
-mvn spring-boot:run
-```
-
-Alternatively, build and run the generated JAR:
-
-```bash
-mvn clean package
-java -jar target/*.jar
-```
-
-After startup, the application should be available at:
+Create a PostgreSQL database and configure the connection in:
 
 ```text
-http://localhost:8080
+src/main/resources/application.properties
 ```
 
-The actual port can be changed in the Spring Boot configuration.
-
----
-
-## 🗄️ Database
-
-The application uses **PostgreSQL** for persistent data storage.
-
-The typical local configuration is:
-
-| Property | Example                    |
-| -------- | -------------------------- |
-| Host     | `localhost`                |
-| Port     | `5432`                     |
-| Database | `portal_services`          |
-| Username | `portal_services_user`     |
-| Password | local development password |
-
-### Database schema
-
-Database entities are managed through Spring Data JPA/Hibernate.
-
-Depending on the active Spring profile and project configuration, schema management can be controlled using:
+Set the required database properties:
 
 ```properties
-spring.jpa.hibernate.ddl-auto=update
+spring.datasource.url=jdbc:postgresql://localhost:5432/<database-name>
+spring.datasource.username=<username>
+spring.datasource.password=<password>
 ```
 
-For production environments, prefer an explicit database migration mechanism rather than relying on automatic schema updates.
+### 3. Run the application
 
----
+Using Maven:
+
+```bash
+./mvnw spring-boot:run
+```
+
+On Windows:
+
+```bash
+mvnw.cmd spring-boot:run
+```
+
+The application will start using the configured Spring Boot environment.
 
 ## 📁 Project Structure
-
-The project follows a standard Spring Boot structure:
 
 ```text
 portal-services/
@@ -161,211 +131,47 @@ portal-services/
 │   ├── main/
 │   │   ├── java/
 │   │   │   └── ...
-│   │   │       ├── controller/       # REST API endpoints
-│   │   │       ├── service/          # Business logic
-│   │   │       ├── repository/       # Database access
-│   │   │       ├── entity/            # JPA entities
-│   │   │       ├── dto/               # Data transfer objects
-│   │   │       └── config/             # Application configuration
-│   │   │
 │   │   └── resources/
-│   │       ├── application.properties
-│   │       └── ...
-│   │
+│   │       └── application.properties
 │   └── test/
 │       └── java/
-│           └── ...
-│
 ├── pom.xml
-├── .gitignore
+├── mvnw
+├── mvnw.cmd
 └── README.md
 ```
 
-> The exact package structure may differ depending on the current implementation. The structure above describes the recommended responsibility of each layer.
+## 🎯 Project Goals
 
----
+The main goals of the project are to demonstrate practical backend development with:
 
-## 🔌 API
+* Java and Spring Boot
+* REST API design
+* Layered application architecture
+* Spring Data JPA and Hibernate
+* PostgreSQL persistence
+* DTO-based API design
+* Automated testing
+* Clean and maintainable code
 
-The application exposes REST endpoints through Spring Web controllers.
+## 🔮 Possible Future Improvements
 
-API endpoints are implemented in the controller layer.
+Potential future improvements include:
 
-### Example endpoint structure
+* Authentication and authorization with Spring Security
+* API documentation with OpenAPI / Swagger
+* Docker support
+* Integration testing with Testcontainers
+* Global exception handling
+* Improved validation and error responses
+* CI/CD pipeline
+* Additional observability and monitoring
 
-```text
-GET    /api/...
-GET    /api/{id}
-POST   /api/...
-PUT    /api/{id}
-PATCH  /api/{id}
-DELETE /api/{id}
-```
+## 👨‍💻 Author
 
-### Example request
+**Wojciech Kesek**
 
-```bash
-curl -X GET \
-  http://localhost:8080/api/example \
-  -H "Accept: application/json"
-```
+Java Backend Developer focused on **Java, Spring Boot, REST APIs, microservices, databases and cloud technologies**.
 
-### Example POST request
-
-```bash
-curl -X POST \
-  http://localhost:8080/api/example \
-  -H "Content-Type: application/json" \
-  -d '{
-    "name": "Example"
-  }'
-```
-
-### API documentation
-
-If OpenAPI/Swagger is enabled in the project, the documentation can typically be accessed through:
-
-```text
-http://localhost:8080/swagger-ui/index.html
-```
-
-OpenAPI JSON:
-
-```text
-http://localhost:8080/v3/api-docs
-```
-
-> These URLs are available only if the corresponding OpenAPI/Swagger dependency and configuration are present in the application.
-
----
-
-## 🧪 Testing
-
-Run the complete test suite with:
-
-```bash
-mvn test
-```
-
-Run tests with a clean build:
-
-```bash
-mvn clean test
-```
-
-Run a specific test class:
-
-```bash
-mvn -Dtest=YourTestClass test
-```
-
-For a specific test method:
-
-```bash
-mvn -Dtest=YourTestClass#yourTestMethod test
-```
-
-### Test types
-
-Tests should cover, where applicable:
-
-* service/business logic,
-* REST controllers,
-* repository/database access,
-* validation,
-* error handling,
-* integration between application layers.
-
----
-
-## 🔧 Development
-
-### Recommended workflow
-
-1. Create a feature branch:
-
-```bash
-git checkout -b feature/my-feature
-```
-
-2. Make your changes.
-
-3. Run the tests:
-
-```bash
-mvn clean test
-```
-
-4. Verify that the application starts correctly:
-
-```bash
-mvn spring-boot:run
-```
-
-5. Commit your changes:
-
-```bash
-git add .
-git commit -m "Add my feature"
-```
-
-6. Push the branch:
-
-```bash
-git push origin feature/my-feature
-```
-
-7. Open a Pull Request.
-
-### Code style
-
-When contributing:
-
-* follow existing project conventions,
-* keep controllers focused on HTTP/API concerns,
-* keep business logic in services,
-* use repositories for persistence operations,
-* avoid exposing database entities directly when DTOs are appropriate,
-* add tests for new functionality,
-* avoid committing secrets or local configuration.
-
----
-
-## 🤝 Contributing
-
-Contributions are welcome.
-
-Before opening a Pull Request:
-
-* make sure the project builds successfully,
-* make sure all tests pass,
-* add tests for new functionality where appropriate,
-* keep the scope of a PR focused,
-* document API or configuration changes,
-* do not commit credentials or sensitive configuration.
-
-### Pull Request checklist
-
-* [ ] Code compiles successfully
-* [ ] Tests pass
-* [ ] New functionality has appropriate tests
-* [ ] API changes are documented
-* [ ] No secrets or credentials were committed
-* [ ] Existing functionality was not unintentionally broken
-
----
-
-## 🐛 Issues
-
-If you find a bug or have an idea for an improvement, create an issue in the GitHub repository:
-
-https://github.com/WojciechKesek/portal-services/issues
-
-When reporting a bug, include:
-
-* a description of the problem,
-* steps to reproduce it,
-* expected behavior,
-* actual behavior,
-* relevant logs or stack traces,
-* Java and Maven versions.
+* GitHub: [WojciechKesek](https://github.com/WojciechKesek)
+* LinkedIn: [Wojciech Kesek](https://www.linkedin.com/in/wojciech-kesek/)
