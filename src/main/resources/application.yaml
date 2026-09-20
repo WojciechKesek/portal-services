@@ -1,3 +1,34 @@
 spring:
   application:
     name: portal-services
+  datasource:
+    url: jdbc:postgresql://localhost:5432/travel_db
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+  data:
+    mongodb:
+      uri: mongodb://admin:admin@localhost:27017/travel_mongo_db?authSource=admin
+
+  rabbitmq:
+    host: localhost
+    port: 5672
+    username: admin
+    password: admin
+
+location:
+  api:
+    url:  https://geocoding-api.open-meteo.com/v1/search?name=%s&count=10&language=en&format=json&countryCode=%s
+
+weather:
+  api:
+    url:  https://archive-api.open-meteo.com/v1/archive?latitude=%f&longitude=%f&start_date=%s&end_date=%s&daily=sunrise,sunset&hourly=temperature_2m,rain,wind_speed_10m&timezone=Europe/Warsaw

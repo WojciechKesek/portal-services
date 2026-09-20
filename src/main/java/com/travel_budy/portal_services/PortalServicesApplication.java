@@ -8,6 +8,7 @@ public class PortalServicesApplication {
 
     static void main(String[] args) {
 		SpringApplication.run(PortalServicesApplication.class, args);
+    //test
 	}
 
 }
